@@ -76,8 +76,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         }
 
         let hostingController = NSHostingController(
-            rootView: MenuBarView(state: state, monitor: monitor, loginItemManager: loginItemManager, updater: updater)
+            rootView: MenuBarView(state: state, monitor: monitor, loginItemManager: loginItemManager, updater: updater, popover: popover)
         )
+        hostingController.sizingOptions = .intrinsicContentSize
         popover.contentViewController = hostingController
         popover.behavior = .transient
 

@@ -1,10 +1,18 @@
 import SwiftUI
 
+private struct ViewHeightKey: PreferenceKey {
+    static var defaultValue: CGFloat = 0
+    static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) {
+        value = nextValue()
+    }
+}
+
 struct MenuBarView: View {
     @ObservedObject var state: AppState
     @ObservedObject var monitor: RouteMonitor
     @ObservedObject var loginItemManager: LoginItemManager
     @ObservedObject var updater: UpdateManager
+    let popover: NSPopover
 
     enum Tab { case routes, settings }
     @State private var selectedTab: Tab = .routes
@@ -140,7 +148,15 @@ struct MenuBarView: View {
         }
         .frame(width: 320)
         .fixedSize(horizontal: false, vertical: true)
-        .frame(maxHeight: (NSScreen.main?.visibleFrame.height ?? 800) * 0.8)
+        .background(
+            GeometryReader { geo in
+                Color.clear.preference(key: ViewHeightKey.self, value: geo.size.height)
+            }
+        )
+        .onPreferenceChange(ViewHeightKey.self) { height in
+            let maxH = (NSScreen.main?.visibleFrame.height ?? 800) * 0.8
+            popover.contentSize = NSSize(width: 320, height: min(height, maxH))
+        }
         .task {
             bootstrap()
         }
