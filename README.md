@@ -23,6 +23,12 @@ A macOS menu bar app that keeps your static routes pinned. Routes get lost after
 
 Download `PinRoutes.app.zip` from the [latest release](https://github.com/Positronico/pinroutes/releases/latest), unzip, and move to `/Applications`.
 
+Because the app is not notarized with an Apple Developer certificate, macOS will quarantine it on first run. Remove the quarantine attribute after downloading:
+
+```bash
+xattr -cr /Applications/PinRoutes.app
+```
+
 ### Build from source
 
 ```bash

@@ -19,6 +19,8 @@ bundle: release
 	mkdir -p $(APP_BUNDLE)/Contents/Resources
 	cp $(BINARY) $(APP_BUNDLE)/Contents/MacOS/$(APP_NAME)
 	cp $(HELPER_BINARY) $(APP_BUNDLE)/Contents/MacOS/$(HELPER_NAME)
+	codesign --force --sign - $(APP_BUNDLE)/Contents/MacOS/$(HELPER_NAME)
+	codesign --force --sign - $(APP_BUNDLE)
 	/usr/bin/printf '%s\n' \
 		'<?xml version="1.0" encoding="UTF-8"?>' \
 		'<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">' \
