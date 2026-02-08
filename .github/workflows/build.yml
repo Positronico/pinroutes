@@ -1,0 +1,40 @@
+name: Build
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: macos-14
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Select Xcode
+        run: sudo xcode-select -s /Applications/Xcode_15.4.app
+
+      - name: Build (debug)
+        run: swift build
+
+      - name: Build (release)
+        run: swift build -c release
+
+      - name: Bundle app
+        run: make bundle
+
+      - name: Verify bundle contents
+        run: |
+          test -f PinRoutes.app/Contents/MacOS/PinRoutes
+          test -f PinRoutes.app/Contents/MacOS/pinroutes-helper
+          test -f PinRoutes.app/Contents/Info.plist
+
+      - name: Test helper validation
+        run: |
+          set +e
+          .build/release/pinroutes-helper 2>&1 | grep -q "Usage:"
+          .build/release/pinroutes-helper inject foo bar 2>&1 | grep -q "Error: action must be"
+          .build/release/pinroutes-helper add bad-cidr 1.2.3.4 2>&1 | grep -q "Error: invalid CIDR"
+          .build/release/pinroutes-helper add 10.0.0.0/24 bad-gw 2>&1 | grep -q "Error: invalid gateway"
+          echo "All validation tests passed"
