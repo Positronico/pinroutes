@@ -1,6 +1,12 @@
-# PinRoutes
+# <img src="assets/app-icon.png" width="28" height="28" alt="PinRoutes icon"> PinRoutes
 
 A macOS menu bar app that keeps your static routes pinned. Routes get lost after sleep, VPN reconnects, or network changes — PinRoutes watches for that and puts them back.
+
+<p align="center">
+  <img src="assets/pinroutes-screenshot1.png" width="320" alt="Routes tab">
+  &nbsp;&nbsp;
+  <img src="assets/pinroutes-screenshot2.png" width="320" alt="Settings tab">
+</p>
 
 ## Features
 
@@ -8,6 +14,7 @@ A macOS menu bar app that keeps your static routes pinned. Routes get lost after
 - **Route management** — add, edit, enable/disable routes with CIDR network + gateway
 - **Periodic monitoring** — checks routes on a configurable interval (15s to 10min)
 - **Auto-reapply** — optionally re-applies missing routes automatically
+- **Auto-update** — checks for new releases on launch; one-click download, replace, and relaunch
 - **Notifications** — alerts you when routes go missing (if auto-reapply is off)
 - **SUID helper** — install once with a single password prompt, then all route operations are silent (no more repeated password dialogs)
 - **Launch at login** — optional, via macOS Login Items
@@ -80,8 +87,8 @@ Routes and settings are stored in `~/Library/Application Support/PinRoutes/`.
 Sources/
   PinRoutes/          # Main app
     App/              # App entry point, AppDelegate
-    Managers/         # RouteManager, RouteMonitor, ConfigManager
-    Models/           # RouteRule, AppState, AppSettings
+    Managers/         # RouteManager, RouteMonitor, ConfigManager, UpdateManager
+    Models/           # RouteRule, AppState, AppSettings, GitHubRelease
     Utilities/        # ShellExecutor, NetworkValidation, Log
     Views/            # SwiftUI views (MenuBar, Routes, Settings, Editor)
   PinRoutesHelper/    # SUID helper binary
