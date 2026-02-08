@@ -81,14 +81,6 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         window.makeKeyAndOrderFront(nil)
         NSApp.activate(ignoringOtherApps: true)
 
-        NotificationCenter.default.addObserver(
-            forName: NSWindow.willCloseNotification,
-            object: window,
-            queue: .main
-        ) { [weak self] _ in
-            Task { @MainActor in self?.onboardingWindow = nil }
-        }
-
         onboardingWindow = window
     }
 
