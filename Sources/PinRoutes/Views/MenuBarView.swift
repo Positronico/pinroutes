@@ -139,6 +139,7 @@ struct MenuBarView: View {
             .padding(.vertical, 8)
         }
         .frame(width: 320)
+        .fixedSize(horizontal: false, vertical: true)
         .frame(maxHeight: (NSScreen.main?.visibleFrame.height ?? 800) * 0.8)
         .task {
             bootstrap()

@@ -135,8 +135,6 @@ struct SettingsTabView: View {
                         .foregroundStyle(.secondary)
                 }
             }
-
-            Spacer()
         }
         .padding(.horizontal, 12)
         .padding(.vertical, 4)
