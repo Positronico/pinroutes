@@ -14,7 +14,7 @@ final class LoginItemManager: ObservableObject {
     func toggle() {
         do {
             if isEnabled {
-                try SMAppService.mainApp.unregister()
+                try? SMAppService.mainApp.unregister()
                 UserDefaults.standard.set(false, forKey: Self.defaultsKey)
                 isEnabled = false
             } else {
