@@ -177,6 +177,12 @@ struct MenuBarView: View {
         state.helperInstalled = ShellExecutor.isHelperInstalled
         log.info("[Bootstrap] loaded \(state.rules.count) rules (\(state.enabledRules.count) enabled), helper=\(state.helperInstalled)")
 
+        loginItemManager.reconcile(shouldBeEnabled: state.settings.launchAtLogin)
+
+        updater.onBeforeTerminate = { [loginItemManager] in
+            loginItemManager.unregisterForUpdate()
+        }
+
         RouteMonitor.requestNotificationPermission()
 
         Task {

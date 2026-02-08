@@ -10,6 +10,7 @@ final class UpdateManager: ObservableObject {
     @Published var errorMessage: String?
 
     private var downloadURL: URL?
+    var onBeforeTerminate: (() -> Void)?
 
     private static let repo = "Positronico/pinroutes"
     private static let apiURL = URL(string: "https://api.github.com/repos/\(repo)/releases/latest")!
@@ -153,6 +154,8 @@ final class UpdateManager: ObservableObject {
 
             downloadProgress = 1.0
             log.info("[Update] launching update script and terminating")
+
+            onBeforeTerminate?()
 
             let process = Process()
             process.executableURL = URL(fileURLWithPath: "/bin/bash")

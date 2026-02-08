@@ -20,7 +20,11 @@ struct SettingsTabView: View {
 
             Toggle("Launch at Login", isOn: Binding(
                 get: { loginItemManager.isEnabled },
-                set: { _ in loginItemManager.toggle() }
+                set: { _ in
+                    loginItemManager.toggle()
+                    state.settings.launchAtLogin = loginItemManager.isEnabled
+                    saveSettings()
+                }
             ))
 
             Divider()
