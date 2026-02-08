@@ -89,8 +89,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     private func dismissOnboarding() {
-        onboardingWindow?.close()
+        onboardingWindow?.orderOut(nil)
         onboardingWindow = nil
+        NSApp.setActivationPolicy(.accessory)
     }
 
     private func updateIcon() {
