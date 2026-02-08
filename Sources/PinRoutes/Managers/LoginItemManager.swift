@@ -9,22 +9,25 @@ final class LoginItemManager: ObservableObject {
 
     init() {
         isEnabled = UserDefaults.standard.bool(forKey: Self.defaultsKey)
+        if isEnabled {
+            try? SMAppService.mainApp.register()
+        }
     }
 
     func toggle() {
-        do {
-            if isEnabled {
-                try? SMAppService.mainApp.unregister()
-                UserDefaults.standard.set(false, forKey: Self.defaultsKey)
-                isEnabled = false
-            } else {
+        if isEnabled {
+            try? SMAppService.mainApp.unregister()
+            UserDefaults.standard.set(false, forKey: Self.defaultsKey)
+            isEnabled = false
+        } else {
+            do {
                 try? SMAppService.mainApp.unregister()
                 try SMAppService.mainApp.register()
                 UserDefaults.standard.set(true, forKey: Self.defaultsKey)
                 isEnabled = true
+            } catch {
+                log.error("[LoginItem] toggle failed: \(error.localizedDescription)")
             }
-        } catch {
-            log.error("[LoginItem] toggle failed: \(error.localizedDescription)")
         }
     }
 }

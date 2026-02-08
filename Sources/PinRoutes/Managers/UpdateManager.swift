@@ -1,5 +1,6 @@
 import Foundation
 import AppKit
+import ServiceManagement
 
 @MainActor
 final class UpdateManager: ObservableObject {
@@ -161,6 +162,7 @@ final class UpdateManager: ObservableObject {
             process.standardError = FileHandle.nullDevice
             try process.run()
 
+            try? SMAppService.mainApp.unregister()
             NSApplication.shared.terminate(nil)
         } catch let error as UpdateError {
             errorMessage = error.errorDescription
