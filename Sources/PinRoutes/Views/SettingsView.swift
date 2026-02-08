@@ -4,6 +4,7 @@ struct SettingsTabView: View {
     @ObservedObject var loginItemManager: LoginItemManager
     @ObservedObject var state: AppState
     @ObservedObject var monitor: RouteMonitor
+    @ObservedObject var updater: UpdateManager
     var onSettingsChanged: () -> Void
     var onInstallHelper: () -> Void
     var onUninstallHelper: () -> Void
@@ -107,6 +108,29 @@ struct SettingsTabView: View {
                     Button("Install Helper") { onInstallHelper() }
                         .controlSize(.small)
                     Text("Eliminates password prompts")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+            }
+
+            Divider()
+                .padding(.vertical, 4)
+
+            Text("ABOUT")
+                .font(.caption)
+                .foregroundStyle(.secondary)
+
+            HStack(spacing: 4) {
+                Text("Version \(updater.currentVersion)")
+                    .font(.caption)
+                Spacer()
+                if updater.updateAvailable {
+                    Button("Update to v\(updater.latestVersion)") {
+                        Task { await updater.downloadAndInstall() }
+                    }
+                    .controlSize(.small)
+                } else {
+                    Text("Up to date")
                         .font(.caption)
                         .foregroundStyle(.secondary)
                 }

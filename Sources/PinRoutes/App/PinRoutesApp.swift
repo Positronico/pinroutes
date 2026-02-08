@@ -17,6 +17,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private let state = AppState()
     private let monitor = RouteMonitor()
     private let loginItemManager = LoginItemManager()
+    private let updater = UpdateManager()
     private var cancellable: AnyCancellable?
     private var onboardingWindow: NSWindow?
 
@@ -75,7 +76,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         }
 
         let hostingController = NSHostingController(
-            rootView: MenuBarView(state: state, monitor: monitor, loginItemManager: loginItemManager)
+            rootView: MenuBarView(state: state, monitor: monitor, loginItemManager: loginItemManager, updater: updater)
         )
         popover.contentViewController = hostingController
         popover.behavior = .transient

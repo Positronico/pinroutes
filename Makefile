@@ -4,6 +4,7 @@ BUILD_DIR = .build/release
 APP_BUNDLE = $(APP_NAME).app
 BINARY = $(BUILD_DIR)/$(APP_NAME)
 HELPER_BINARY = $(BUILD_DIR)/$(HELPER_NAME)
+VERSION := $(shell git describe --tags --abbrev=0 2>/dev/null | sed 's/^v//' || echo "0.0.0-dev")
 
 .PHONY: build release bundle clean run
 
@@ -34,9 +35,9 @@ bundle: release
 		'	<key>CFBundleName</key>' \
 		'	<string>$(APP_NAME)</string>' \
 		'	<key>CFBundleVersion</key>' \
-		'	<string>1.0</string>' \
+		'	<string>$(VERSION)</string>' \
 		'	<key>CFBundleShortVersionString</key>' \
-		'	<string>1.0</string>' \
+		'	<string>$(VERSION)</string>' \
 		'	<key>CFBundleIconFile</key>' \
 		'	<string>AppIcon</string>' \
 		'	<key>CFBundlePackageType</key>' \

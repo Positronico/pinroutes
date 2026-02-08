@@ -4,6 +4,7 @@ struct MenuBarView: View {
     @ObservedObject var state: AppState
     @ObservedObject var monitor: RouteMonitor
     @ObservedObject var loginItemManager: LoginItemManager
+    @ObservedObject var updater: UpdateManager
 
     enum Tab { case routes, settings }
     @State private var selectedTab: Tab = .routes
@@ -36,6 +37,41 @@ struct MenuBarView: View {
             .padding(.bottom, 8)
 
             Divider()
+
+            // Update banner
+            if updater.updateAvailable {
+                HStack(spacing: 6) {
+                    Image(systemName: "arrow.down.circle.fill")
+                        .foregroundStyle(.blue)
+                        .font(.caption)
+                    Text("v\(updater.latestVersion) available")
+                        .font(.caption)
+                    Spacer()
+                    if updater.isDownloading {
+                        ProgressView(value: updater.downloadProgress)
+                            .frame(width: 60)
+                            .controlSize(.small)
+                    } else {
+                        Button("Update") {
+                            Task { await updater.downloadAndInstall() }
+                        }
+                        .controlSize(.small)
+                    }
+                }
+                .padding(.horizontal, 12)
+                .padding(.vertical, 6)
+                .background(Color.blue.opacity(0.08))
+
+                if let error = updater.errorMessage {
+                    Text(error)
+                        .font(.caption2)
+                        .foregroundStyle(.red)
+                        .padding(.horizontal, 12)
+                        .padding(.bottom, 4)
+                }
+
+                Divider()
+            }
 
             // Tab content
             switch selectedTab {
@@ -78,6 +114,7 @@ struct MenuBarView: View {
                     loginItemManager: loginItemManager,
                     state: state,
                     monitor: monitor,
+                    updater: updater,
                     onSettingsChanged: { restartMonitorIfNeeded() },
                     onInstallHelper: { installHelper() },
                     onUninstallHelper: { uninstallHelper() }
@@ -92,6 +129,9 @@ struct MenuBarView: View {
                     .font(.caption)
                     .foregroundStyle(.secondary)
                 Spacer()
+                Text("v\(updater.currentVersion)")
+                    .font(.caption2)
+                    .foregroundStyle(.tertiary)
                 Button("Quit") { NSApplication.shared.terminate(nil) }
                     .controlSize(.small)
             }
@@ -131,6 +171,8 @@ struct MenuBarView: View {
                 log.info("[Bootstrap] starting route monitor (interval: \(state.settings.checkIntervalSeconds)s)")
                 monitor.start(state: state)
             }
+
+            await updater.checkForUpdate()
             log.info("[Bootstrap] complete")
         }
     }
