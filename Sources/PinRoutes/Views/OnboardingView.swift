@@ -16,8 +16,10 @@ struct OnboardingView: View {
 
             VStack(alignment: .leading, spacing: 12) {
                 Text("PinRoutes needs administrator privileges to manage network routes. By default, macOS asks for your password each time a route is added or removed.")
+                    .fixedSize(horizontal: false, vertical: true)
 
                 Text("Install a lightweight helper to skip the password prompt. It only runs /sbin/route commands — nothing else. You'll enter your password once during setup.")
+                    .fixedSize(horizontal: false, vertical: true)
             }
             .font(.body)
             .foregroundStyle(.secondary)

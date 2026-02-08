@@ -23,6 +23,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private static let normalIcon = "point.topright.arrow.triangle.backward.to.point.bottomleft.scurvepath.fill"
     private static let alertIcon = "exclamationmark.triangle.fill"
 
+    func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool {
+        false
+    }
+
     func applicationDidFinishLaunching(_ notification: Notification) {
         NSApp.setActivationPolicy(.accessory)
         NSApp.windows.forEach { $0.close() }
