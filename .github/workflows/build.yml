@@ -13,15 +13,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Select Xcode
-        run: sudo xcode-select -s /Applications/Xcode_16.2.app
-
-      - name: Show toolchain info
-        run: |
-          xcodebuild -version
-          swift --version
-          xcrun --show-sdk-path
-          xcrun --show-sdk-version
-          ls /Applications/ | grep Xcode
+        run: sudo xcode-select -s /Applications/Xcode_26.2.app
 
       - name: Build (debug)
         run: swift build
