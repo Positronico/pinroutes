@@ -19,6 +19,7 @@ bundle: release
 	mkdir -p $(APP_BUNDLE)/Contents/Resources
 	cp $(BINARY) $(APP_BUNDLE)/Contents/MacOS/$(APP_NAME)
 	cp $(HELPER_BINARY) $(APP_BUNDLE)/Contents/MacOS/$(HELPER_NAME)
+	cp Sources/PinRoutes/Resources/AppIcon.icns $(APP_BUNDLE)/Contents/Resources/AppIcon.icns
 	codesign --force --sign - $(APP_BUNDLE)/Contents/MacOS/$(HELPER_NAME)
 	codesign --force --sign - $(APP_BUNDLE)
 	/usr/bin/printf '%s\n' \
@@ -36,6 +37,8 @@ bundle: release
 		'	<string>1.0</string>' \
 		'	<key>CFBundleShortVersionString</key>' \
 		'	<string>1.0</string>' \
+		'	<key>CFBundleIconFile</key>' \
+		'	<string>AppIcon</string>' \
 		'	<key>CFBundlePackageType</key>' \
 		'	<string>APPL</string>' \
 		'	<key>LSMinimumSystemVersion</key>' \

@@ -10,7 +10,8 @@ let package = Package(
     targets: [
         .executableTarget(
             name: "PinRoutes",
-            path: "Sources/PinRoutes"
+            path: "Sources/PinRoutes",
+            exclude: ["Resources"]
         ),
         .executableTarget(
             name: "pinroutes-helper",
