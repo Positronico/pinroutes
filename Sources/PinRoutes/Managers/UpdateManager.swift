@@ -162,7 +162,7 @@ final class UpdateManager: ObservableObject {
             process.standardError = FileHandle.nullDevice
             try process.run()
 
-            try? SMAppService.mainApp.unregister()
+            try? await SMAppService.mainApp.unregister()
             NSApplication.shared.terminate(nil)
         } catch let error as UpdateError {
             errorMessage = error.errorDescription
