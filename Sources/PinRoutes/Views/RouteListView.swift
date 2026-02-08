@@ -48,27 +48,24 @@ struct RoutesTabView: View {
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, 24)
             } else {
-                ScrollView {
-                    VStack(spacing: 0) {
-                        ForEach(state.rules) { rule in
-                            RouteRowView(
-                                rule: rule,
-                                status: state.statusFor(rule),
-                                onToggle: { onToggle(rule) },
-                                onEdit: { onEdit(rule) },
-                                onDelete: { onDelete(rule) }
-                            )
+                VStack(spacing: 0) {
+                    ForEach(state.rules) { rule in
+                        RouteRowView(
+                            rule: rule,
+                            status: state.statusFor(rule),
+                            onToggle: { onToggle(rule) },
+                            onEdit: { onEdit(rule) },
+                            onDelete: { onDelete(rule) }
+                        )
 
-                            if rule.id != state.rules.last?.id {
-                                Divider()
-                                    .padding(.leading, 24)
-                            }
+                        if rule.id != state.rules.last?.id {
+                            Divider()
+                                .padding(.leading, 24)
                         }
                     }
-                    .padding(.horizontal, 12)
-                    .padding(.vertical, 4)
                 }
-                .frame(maxHeight: 260)
+                .padding(.horizontal, 12)
+                .padding(.vertical, 4)
             }
 
             Button {
