@@ -20,8 +20,44 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private var cancellable: AnyCancellable?
     private var onboardingWindow: NSWindow?
 
-    private static let normalIcon = "point.topright.arrow.triangle.backward.to.point.bottomleft.scurvepath.fill"
     private static let alertIcon = "exclamationmark.triangle.fill"
+
+    private static func makePinIcon() -> NSImage {
+        let size = NSSize(width: 18, height: 18)
+        let image = NSImage(size: size, flipped: false) { rect in
+            let s = rect.height
+
+            let path = NSBezierPath()
+            path.windingRule = .evenOdd
+
+            // Outer pin shape (same bezier curves as app icon)
+            path.move(to: NSPoint(x: s * 0.5, y: s * 0.08))
+            path.curve(to: NSPoint(x: s * 0.78, y: s * 0.55),
+                        controlPoint1: NSPoint(x: s * 0.68, y: s * 0.24),
+                        controlPoint2: NSPoint(x: s * 0.78, y: s * 0.40))
+            path.curve(to: NSPoint(x: s * 0.5, y: s * 0.92),
+                        controlPoint1: NSPoint(x: s * 0.78, y: s * 0.72),
+                        controlPoint2: NSPoint(x: s * 0.65, y: s * 0.92))
+            path.curve(to: NSPoint(x: s * 0.22, y: s * 0.55),
+                        controlPoint1: NSPoint(x: s * 0.35, y: s * 0.92),
+                        controlPoint2: NSPoint(x: s * 0.22, y: s * 0.72))
+            path.curve(to: NSPoint(x: s * 0.5, y: s * 0.08),
+                        controlPoint1: NSPoint(x: s * 0.22, y: s * 0.40),
+                        controlPoint2: NSPoint(x: s * 0.32, y: s * 0.24))
+            path.close()
+
+            // Inner circle cutout (even-odd creates the hole)
+            let r = s * 0.14
+            let cy = s * 0.62
+            path.appendOval(in: NSRect(x: s * 0.5 - r, y: cy - r, width: r * 2, height: r * 2))
+
+            NSColor.black.setFill()
+            path.fill()
+            return true
+        }
+        image.isTemplate = true
+        return image
+    }
 
     func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool {
         false
@@ -33,7 +69,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
         statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.squareLength)
         if let button = statusItem.button {
-            button.image = NSImage(systemSymbolName: Self.normalIcon, accessibilityDescription: "PinRoutes")
+            button.image = Self.makePinIcon()
             button.action = #selector(togglePopover)
             button.target = self
         }
@@ -95,8 +131,11 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     private func updateIcon() {
-        let name = state.hasMissingRoutes ? Self.alertIcon : Self.normalIcon
-        statusItem.button?.image = NSImage(systemSymbolName: name, accessibilityDescription: "PinRoutes")
+        if state.hasMissingRoutes {
+            statusItem.button?.image = NSImage(systemSymbolName: Self.alertIcon, accessibilityDescription: "PinRoutes")
+        } else {
+            statusItem.button?.image = Self.makePinIcon()
+        }
     }
 
     @objc private func togglePopover() {
